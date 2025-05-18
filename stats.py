@@ -1,3 +1,5 @@
+import copy
+
 def get_book_text(fp):
     with open(fp) as f:
         file_contents = f.read()
@@ -22,6 +24,9 @@ def get_character_list(word_list):
 
     return char_dict
 
+def sort_on(char_dict):
+    return char_dict["num"]
+
 def sort_dict(char_dict):
     char_list = []
     entry_dict = {}
@@ -30,10 +35,13 @@ def sort_dict(char_dict):
         entry_dict["char"] = character
         entry_dict["num"] = char_dict[character]
 
-        char_list.append(entry_dict)
+        if entry_dict["char"].isalpha():
+            char_list.append(copy.deepcopy(entry_dict))
 
         del entry_dict["char"]
         del entry_dict["num"]
+
+    char_list.sort(key=sort_on, reverse=True)
 
     return char_list
 
@@ -47,9 +55,8 @@ def print_report(sorted_char_dict, fp, word_count):
 
 
     for entry_dict in sorted_char_dict:
-        #entry_char = entry_dict["char"]
-        #entry_num = entry_dict["num"]
-        print(entry_dict)
-        #print(f"'{entry_char}': {entry_num}")
+        entry_char = entry_dict["char"]
+        entry_num = entry_dict["num"]
+        print(f"{entry_char}: {entry_num}")
 
     print("============= END ===============")
